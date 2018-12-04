@@ -1,0 +1,16 @@
+.swp
+**.sw*
+*.swo
+*.swp
+*.log
+node_modules/
+build/
+coverage/
+tmp
+.idea
+.DS_Store
+
+# sensitive data
+.env*
+!.env.dev
+!.env.sample

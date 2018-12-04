@@ -1,0 +1,117 @@
+type UserEdge implements Edge {
+  cursor: String!
+  node: User
+}
+
+type UserConnection implements Connection {
+  edges: [UserEdge]
+  nodes: [User]
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type User implements Node {
+  id: ID!
+  name: String!
+  fbId: String!
+  nickname: String!
+  settings: [KeyValue!]
+  demographics: [KeyValue!]
+
+  totalFollowers: Int!
+  totalFollowing: Int!
+  totalGroups: Int!
+  totalLinks: Int!
+
+  followers(
+    search: String
+    first: Int
+    after: String
+    last: Int
+    before: String
+    orderBy: BaseOrder
+  ): RelationshipConnection
+
+  following(
+    search: String
+    first: Int
+    after: String
+    last: Int
+    before: String
+    orderBy: BaseOrder
+  ): RelationshipConnection
+
+  groups(
+    search: String
+    first: Int
+    after: String
+    last: Int
+    before: String
+    orderBy: BaseOrder
+  ): GroupConnection
+
+  links(
+    search: String
+    first: Int
+    after: String
+    last: Int
+    before: String
+    orderBy: BaseOrder
+  ): LinkConnection
+
+  devices(
+    search: String
+    first: Int
+    after: String
+    last: Int
+    before: String
+    orderBy: BaseOrder
+  ): DeviceConnection
+}
+
+type Session {
+  user: User!
+  token: String!
+  refreshToken: String!
+}
+
+type Query {
+  user(id: ID!): User
+  searchUser(term: String!): UserConnection
+}
+
+input KeyValueInput {
+  key: String!
+  value: String!
+}
+
+# input CreateUserFacebook {
+#   id: ID
+#   name: String!
+#   fbId: String!
+#   nickname: String!
+#   settings: [KeyValueInput!]
+#   demographics: [KeyValueInput!]
+# }
+
+input UpdateUser {
+  name: String
+  nickname: String
+  settings: [KeyValueInput!]
+  demographics: [KeyValueInput!]
+}
+
+type Mutation {
+  # Social Sign Up
+  signUpFacebook(token: ID!): Session
+
+  ## 2nd Phase
+  # Traditional Email
+  # signUpEmail(): User
+  # confirmEmail(): OperationPayload
+  # createPassword(): OperationPayload
+  # signIn(id: ID!): User
+
+  updateUser(id: ID, input: UpdateUser): User
+  refreshToken(refreshToken: String!): Session
+}
